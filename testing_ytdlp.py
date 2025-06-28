@@ -51,7 +51,7 @@ opts = {'continuedl': False,
 with YoutubeDL(opts) as ydl:
     # videoInfo = json.loads(subprocess.run(f'yt-dlp --force-overwrites --embed-subs --embed-thumbnail --embed-metadata --dump-json --no-playlist --output "video.%(ext)s" "{url}"', capture_output=True).stdout)
     url = "https://www.youtube.com/watch?v=StRmUQsAByQ&pp=ygUDaGV5"
-    videoInfo = json.loads(json.dumps(ydl.sanitize_info(ydl.extract_info(url, download=False))))
+    videoInfo = ydl.sanitize_info(ydl.extract_info(url, download=False))
     # for key, values in videoInfo.items():
     #     print(key, values)
 
@@ -64,3 +64,4 @@ with YoutubeDL(opts) as ydl:
            'thumbnail': thumbnail,
            'description': desc,
            'duration': duration}
+    print(videoPreviewInfo)

@@ -1,6 +1,6 @@
 import re
 from flask import Flask, request, send_from_directory, send_file
-from flask_cors import cross_origin, CORS
+from flask_cors import cross_origin
 from yt_dlp import YoutubeDL
 import json
 from os import getcwd
@@ -26,17 +26,26 @@ def query(url):
     with YoutubeDL(opts) as ydl:
         videoInfo = ydl.sanitize_info(ydl.extract_info(url, download=False))
 
-        title = videoInfo['title']
-        id = videoInfo['id']
-        thumbnail = videoInfo['thumbnail']
-        desc = videoInfo['description']
-        duration = videoInfo['duration']
+        # title = videoInfo['title']
+        # id = videoInfo['id']
+        # thumbnail = videoInfo['thumbnail']
+        # desc = videoInfo['description']
+        # duration = videoInfo['duration']
 
-        return {'title': title,
-                'id': id,
-                'thumbnail': thumbnail,
-                'description': desc,
-                'duration': duration}
+        # for k, v in videoInfo.items():
+        #     print(k, v)
+
+        return {
+                'title': videoInfo['title'],
+                'id': videoInfo['id'],
+                'channel': videoInfo['channel'],
+                'channel_url': videoInfo['channel_url'],
+                'thumbnail': videoInfo['thumbnail'],
+                'description': videoInfo['description'],
+                'duration': videoInfo['duration'],
+                'view_count': videoInfo['view_count'],
+                'like_count': videoInfo['like_count'],
+                }
 
 @app.route('/download/<path:url>', methods=['POST'])
 @cross_origin(origins=['http://localhost:3000'])

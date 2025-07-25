@@ -25,15 +25,7 @@ def query(url):
              'simulate': True}
     with YoutubeDL(opts) as ydl:
         videoInfo = ydl.sanitize_info(ydl.extract_info(url, download=False))
-
-        # title = videoInfo['title']
-        # id = videoInfo['id']
-        # thumbnail = videoInfo['thumbnail']
-        # desc = videoInfo['description']
-        # duration = videoInfo['duration']
-
-        # for k, v in videoInfo.items():
-        #     print(k, v)
+        resolutions = map(lambda format: format['resolution'],  videoInfo['formats'])
 
         return {
                 'title': videoInfo['title'],
@@ -41,6 +33,7 @@ def query(url):
                 'channel': videoInfo['channel'],
                 'channel_url': videoInfo['channel_url'],
                 'thumbnail': videoInfo['thumbnail'],
+                'resolutions': list(set(resolutions)),
                 'description': videoInfo['description'],
                 'duration': videoInfo['duration'],
                 'view_count': videoInfo['view_count'],
@@ -63,9 +56,10 @@ def download(url):
                 with open(f"status\\{progressInfo['info_dict']['id']}", 'w') as statusfile:
                     statusfile.write('finished')
 
+    res = request.args.get('res')
     opts = {'continuedl': False,
              'extract_flat': 'discard_in_playlist',
-             'format_sort': ['res:1080', '+size'],
+             'format_sort': [f'res:{res}', '+size'],
              'fragment_retries': 10,
              'ignoreerrors': 'only_download',
              'no_warnings': True,
@@ -104,7 +98,11 @@ def progress(id):
     with open(f'status\\{id}', 'r') as statusfile:
         content = statusfile.read()
     if content != 'finished':
-        return json.loads(content)
+        try:
+            progressInfo = json.loads(content)
+            return progressInfo
+        except:
+            return '0.0%'
     else:
         return 'finished'
 

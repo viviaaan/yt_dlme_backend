@@ -1,6 +1,6 @@
 # yt-dlme backend
 
-A simple backend for [yt-dlme](https://github.com/viviaaan/yt_dlme) - a frontend wrapper for the CLI tool `yt-dlp`
+A simple backend for using _Flask_ [yt-dlme](https://github.com/viviaaan/yt_dlme) - a frontend wrapper for the CLI tool `yt-dlp`
 
 ## Functionalities
 
